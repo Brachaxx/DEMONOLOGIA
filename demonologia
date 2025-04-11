@@ -1,0 +1,302 @@
+using System;
+using System.Threading;
+
+class Program
+{
+    static int graczHP;
+    static int przeciwnikHP;
+    static int atakGracza = 10;
+    static int wzmocnienieAtaku = 0;
+    static int leczZycie = 20;
+    static int atakDemona;
+    static string nazwaGracza = "Gracz";
+    static int punkty = 0;
+    static int runda = 1;
+    static int poczatkoweHP;
+    static int poczatkoweHPDemona;
+    static int liczbaRzekizKwasem = 3;
+    static int liczbaPotionow = 3;
+    
+
+    static void UstawPoziomTrudnosci()
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("★ WYBIERZ POZIOM TRUDNOŚCI★:");
+        Console.WriteLine("1. Łatwy\n2. Średni\n3. Trudny");
+        Console.ResetColor();
+
+        string wybor = Console.ReadLine();
+        switch (wybor)
+        {
+            case "1":
+                poczatkoweHP = 120;
+                graczHP = poczatkoweHP;
+                poczatkoweHPDemona = 80;
+                przeciwnikHP = poczatkoweHPDemona;
+                atakDemona = 8;
+                Console.WriteLine("Wybrano poziom: Łatwy");
+                break;
+            case "2":
+                poczatkoweHP = 100;
+                graczHP = poczatkoweHP;
+                poczatkoweHPDemona = 100;
+                przeciwnikHP = poczatkoweHPDemona;
+                atakDemona = 12;
+                Console.WriteLine("Wybrano poziom: Średni");
+                break;
+            case "3":
+                poczatkoweHP = 80;
+                graczHP = poczatkoweHP;
+                poczatkoweHPDemona = 120;
+                przeciwnikHP = poczatkoweHPDemona;
+                atakDemona = 16;
+                Console.WriteLine("Wybrano poziom: Trudny");
+                break;
+            default:
+                Console.WriteLine("Nieznana opcja, ustawiono poziom Średni.");
+                poczatkoweHP = 100;
+                graczHP = poczatkoweHP;
+                poczatkoweHPDemona = 100;
+                przeciwnikHP = poczatkoweHPDemona;
+                atakDemona = 12;
+                break;
+        }
+    }
+
+    static void RysujDemonologie()
+    {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine(" ██████╗ ███████╗███╗   ███╗ ██████╗ ███╗   ██╗ ██████╗ ██╗      ██████╗  ██████╗ ██╗ █████╗ ");
+        Console.WriteLine(" ██╔══██╗██╔════╝████╗ ████║██╔═══██╗████╗  ██║██╔═══██╗██║     ██╔═══██╗██╔════╝ ██║██╔══██╗ ");
+        Console.WriteLine(" ██║  ██║█████╗  ██╔████╔██║██║   ██║██╔██╗ ██║██║   ██║██║     ██║   ██║██║  ███╗██║███████║ ");
+        Console.WriteLine(" ██║  ██║██╔══╝  ██║╚██╔╝██║██║   ██║██║╚██╗██║██║   ██║██║     ██║   ██║██║   ██║██║██╔══██║ ");
+        Console.WriteLine(" ██████╔╝███████╗██║ ╚═╝ ██║╚██████╔╝██║ ╚████║╚██████╔╝███████╗╚██████╔╝╚██████╔╝██║██║  ██║ ");
+        Console.WriteLine(" ╚═════╝ ╚══════╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═╝ ");
+        Console.ResetColor();
+        Console.WriteLine("                                █▓▒▓█▀██▀█▄░░▄█▀██▀█▓▒▓█");
+        Console.WriteLine("                                █▓▒░▀▄▄▄▄▄█░░█▄▄▄▄▄▀░▒▓█");
+        Console.WriteLine("                                █▓▓▒░░░░░▒▓░░▓▒░░░░░▒▓▓█");
+        Console.WriteLine("==============================================================================================");
+        Console.WriteLine($"                                 Witaj w Piekle, {nazwaGracza}!");
+        Console.WriteLine("                    Demon atakuje, kiedy najmniej się go spodziewasz!   ");
+        Console.WriteLine("==============================================================================================");
+        Console.WriteLine($"Runda: {runda}");
+        Thread.Sleep(50);
+    }
+
+    static void Hydropompa()
+    {
+        int obrazenia = atakGracza + wzmocnienieAtaku;
+        przeciwnikHP -= obrazenia;
+        Console.WriteLine($"{nazwaGracza} używa Hydropompy! Zadaje {obrazenia} obrażeń.");
+        Thread.Sleep(20);
+    }
+
+    static void Rehabilitacja()
+    {
+        graczHP += leczZycie;
+        Console.WriteLine($"{nazwaGracza} używa Rehabilitacji! Odzyskuje {leczZycie} punktów życia.");
+        Thread.Sleep(20);
+    }
+
+    static void Buchta()
+    {
+        wzmocnienieAtaku += 5;
+        Console.WriteLine($"{nazwaGracza} używa Podkręconej Hydropompy! Zyskuje 5 punktów do ataku.");
+        Thread.Sleep(20);
+    }
+
+    static void RzutSierpem()
+    {
+        Random rand = new Random();
+        int obrazenia = rand.Next(atakDemona - 3, atakDemona + 3);
+        graczHP -= obrazenia;
+        Console.WriteLine($"Demon używa Rzutu Sierpem! Zadaje {obrazenia} obrażeń.");
+        Thread.Sleep(2000);
+    }
+
+    static void StanGry()
+    {
+        Console.WriteLine($"{nazwaGracza}: {graczHP} HP | Demon: {przeciwnikHP} HP");
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("Wybierz akcję:");
+        Console.WriteLine("1. ★ Atak - Hydropompa ★");
+        Console.WriteLine("2. ★ Leczenie - Rehabilitacja ★");
+        Console.WriteLine("3. ★ Wzmocnienie ataku - Podkręcona Hydropompa ★");
+        if (liczbaRzekizKwasem > 0)
+        {
+            Console.WriteLine("4. ★ 3 x Rzeka z Kwasem (Demon traci 30 HP) ★");
+        }
+        if (liczbaPotionow > 0)
+        {
+            Console.WriteLine("5. ★ 3 x Użyj Potionu (Leczy 30 HP) ★");
+        }
+         Console.ResetColor();
+         Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("Wpisz 'exit', aby zakończyć grę.");
+         Console.ResetColor();
+    }
+     static void UzyjPotionu()
+    {
+        if (liczbaPotionow > 0)
+        {
+            graczHP += 30;
+            liczbaPotionow--;
+            Console.WriteLine($"{nazwaGracza} używa Potionu! Odzyskuje 30 punktów życia.");
+            Console.WriteLine($"Pozostało potionów: {liczbaPotionow}");
+        }
+        else
+        {
+            Console.WriteLine("Nie masz już potionów!");
+        }
+        Thread.Sleep(2000);
+    }
+
+static void RzekazKwasem()
+    {
+        if (liczbaRzekizKwasem > 0)
+        {
+            przeciwnikHP -= 30;
+            liczbaRzekizKwasem--;
+            Console.WriteLine($"{nazwaGracza} używa Rzeki Kwasu! Demon traci 30 HP.");
+            Console.WriteLine($"Pozostało użyć Rzeki Kwasu: {liczbaRzekizKwasem}");
+        }
+        else
+        {
+            Console.WriteLine("Nie masz już dostępnych użyć Rzeki z Kwasem!");
+        }
+        Thread.Sleep(2000);
+    }
+
+    static void Gra()
+    {
+        while (graczHP > 0 && przeciwnikHP > 0)
+        {
+            RysujDemonologie();
+            StanGry();
+
+            Console.Write("Wybór: ");
+            string wybor = Console.ReadLine();
+
+            if (wybor.ToLower() == "exit")
+            {
+                Console.WriteLine("Zakończono grę. Bój się demona!");
+                Console.WriteLine($"Zdobyte punkty: {punkty}");
+                Console.WriteLine("░░░░░▄▄▄▀▀▀▀▀▀▀▀▀▄▄▄░░░░░░░░░");
+                Console.WriteLine("░░░▄▀░░░░░░░░░░░░░░░▀▀▄▄░░░░░");
+                Console.WriteLine("░░▄▀░░░░░░░░░░░░░░░░░░░░▀▄░░░");
+                Console.WriteLine("░▄▀░░░░░░░░░░░░░░░░░░░░░░░█░░");
+                Console.WriteLine("░█░░░░░░░░░░░░░░░░░░░░░░░░░█░");
+                Console.WriteLine("▐░░░░░░░░░░░░░░░░░░░░░░░░░░░█");
+                Console.WriteLine("█░░░░▀▀█▄▄▄░░░▄▌░░░░░░░░░░░░▐");
+                Console.WriteLine("▌░░░░░▌░██▀█▀▀░░░▄▄▄▄▄░░░░▌░▐");
+                Console.WriteLine("▌░░░░░▀▄▄▄▀░░░░░░▌░▀███▄▄▀░░▐");
+                Console.WriteLine("▌░░░░░▀▄▄▄▀░░░░░░▌░▀███▄▄▀░░▐");
+                Console.WriteLine("▐░░░░▐▀░░░░░░░░░░░░░░░░░░░▄▀░");
+                Console.WriteLine("░█░░░▌░░▄▀▀▀▄▄▄░░░░░░░░░░▄▀░░");
+                Console.WriteLine("░░█░░▀░░░░▄▄▄▄░▀▀▌░░▌░░░█░░░░");
+                Console.WriteLine("░░░▀▄░░░░░░░░░▀░░░▄▀░░▄▀░░░░░");
+                Console.WriteLine("░░░░░▀▄▄▄░░░░░░░░░▄▄▀▀░░░░░░░");
+                Console.WriteLine("░░░░░░░░▐▀▀▀▀▀▀▀▀▀░░░░░░░░░░░");
+                Console.WriteLine("░░░░░░░░█░░░░░░░░░░░░░░░░░░░░");
+                Console.WriteLine("█▀▀█ █▀▀█ █▀▀ 　 █░░█ █▀▀█ █░░█");
+                Console.WriteLine("█▄▄█ █▄▄▀ █▀▀ 　 █▄▄█ █░░█ █░░█");
+                Console.WriteLine("▀░░▀ ▀░▀▀ ▀▀▀ 　 ▄▄▄█ ▀▀▀▀ ░▀▀▀");
+                Console.WriteLine("▒█░▄▀ ▀█▀ ▒█▀▀▄ ▒█▀▀▄ ▀█▀ ▒█▄░▒█ ▒█▀▀█");
+                Console.WriteLine("▒█▀▄░ ▒█░ ▒█░▒█ ▒█░▒█ ▒█░ ▒█▒█▒█ ▒█░▄▄");
+                Console.WriteLine("▒█░▒█ ▄█▄ ▒█▄▄▀ ▒█▄▄▀ ▄█▄ ▒█░░▀█ ▒█▄▄█");
+                Console.WriteLine("▒█▀▄▀█ ▒█▀▀▀ ▀█");
+                Console.WriteLine("▒█▒█▒█ ▒█▀▀▀ █▀");
+                Console.WriteLine("▒█░░▒█ ▒█▄▄▄ ▄░");
+                return;
+            }
+
+            if (wybor == "1")
+            {
+                Hydropompa();
+            }
+            else if (wybor == "2")
+            {
+                Rehabilitacja();
+            }
+            else if (wybor == "3")
+            {
+                Buchta();
+            }
+                else if (wybor == "4")
+            {
+                RzekazKwasem();
+                }
+            else if (wybor == "5")
+            {
+                UzyjPotionu();
+            }
+            else
+            {
+                Console.WriteLine("Nieznany wybór!");
+                continue;
+            }
+
+            if (przeciwnikHP <= 0)
+            {
+                Console.WriteLine("Gratulacje! Pokonałeś Demona!");
+                punkty += 100;
+                punkty += graczHP * 2;
+                punkty *= runda;
+                Console.WriteLine($"Zdobyte punkty: {punkty}");
+                runda++;
+                Console.WriteLine("╔══╗░░░░╔╦╗░░╔═════╗");
+                Console.WriteLine("║╚═╬════╬╣╠═╗║░▀░▀░║");
+                Console.WriteLine("╠═╗║╔╗╔╗║║║╩╣║╚═══╝║");
+                Console.WriteLine("╚══╩╝╚╝╚╩╩╩═╝╚═════╝");  
+                przeciwnikHP = poczatkoweHPDemona + (runda - 1) * 10;           
+                Console.WriteLine("Chcesz przejść do następnej rundy? (t/n)");
+                string kontynuuj = Console.ReadLine();
+                if (kontynuuj.ToLower() == "t")
+                {
+                    przeciwnikHP = poczatkoweHPDemona + (runda - 1) * 10;
+                    graczHP = poczatkoweHP;
+                    wzmocnienieAtaku = 0;
+                    Gra();
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Koniec gry! Bój się Demona!");
+                    return;
+                }
+            }
+
+            RzutSierpem();
+
+            if (graczHP <= 0)
+            {
+                Console.WriteLine("Przegrałeś! Demon cię zniszczył!");
+                punkty -= 50;
+                punkty += graczHP * 2;
+                punkty *= runda;
+                Console.WriteLine($"Stracone punkty: {punkty}");
+                Console.WriteLine("──▄────▄▄▄▄▄▄▄────▄───");
+                Console.WriteLine("─▀▀▄─▄█████████▄─▄▀▀──");
+                Console.WriteLine("─────██─▀███▀─██──────");
+                Console.WriteLine("───▄─▀████▀████▀─▄────");
+                Console.WriteLine("─▀█────██▀█▀██────█▀──"); 
+                break;
+            }
+        }
+    }
+    static void Main(string[] args)
+    {
+
+        Console.Write("Jak masz na imię pogromco demonów?: ");
+        nazwaGracza = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(nazwaGracza))
+        {
+            nazwaGracza = "Gracz";
+        }
+
+        UstawPoziomTrudnosci();
+        Gra();
+    }
+}
