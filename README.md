@@ -1,4 +1,4 @@
 # DEMONOLOGIA
-Moja pierwsza gra na konsoli robiona z większym zaangażowaniem. Nie spodziewałam się, że tworzenie jej może mnie zaciekawić. 
+Moja pierwsza gra na konsoli. 
 # CS
 tworzone wyłącznie w tym języku. 
